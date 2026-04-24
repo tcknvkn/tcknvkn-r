@@ -1,0 +1,13 @@
+Package: tcknvkn
+Type: Package
+Title: TCKN ve VKN Doğrulama Fonksiyonları
+Version: 1.0.0
+Authors@R: c(person("TCKNVKN", email = "239645710+tckn-vkn@users.noreply.github.com", role = c("aut", "cre")))
+Description: R projelerinde TCKN ve VKN doğrulama fonksiyonları sağlar.
+License: MIT + file LICENSE
+URL: https://github.com/tcknvkn/tcknvkn-r,
+    https://www.tcknvkn.com/kutuphaneler/r
+BugReports: https://github.com/tcknvkn/tcknvkn-r/issues
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.2
