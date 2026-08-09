@@ -74,6 +74,26 @@ jobs:
           git fetch origin release --depth=1
           git merge-base --is-ancestor "$GITHUB_SHA" "origin/release"
 
+      # Etiket manifest surumuyle ayni mi. Sapma yayin aninda degil etiket
+      # aninda yakalanir: nuget csproj 1.0.0 derken NuGet'te 1.0.8 yayindaydi
+      # ve sekiz yamalik fark aylarca kimsenin dikkatini cekmedi.
+      # On surum eki karsilastirmaya girmez: v1.2.3-rc1 -> 1.2.3.
+      - name: Etiket manifest surumuyle ayni mi
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          TAG_VERSION="${TAG_VERSION%%-*}"
+          MANIFEST_VERSION=$(sed -nE 's/^Version:[[:space:]]*([^[:space:]]+).*/\1/p' DESCRIPTION | head -1)
+          if [ -z "$MANIFEST_VERSION" ]; then
+            echo "::error::Manifest surumu okunamadi (DESCRIPTION)."
+            exit 1
+          fi
+          if [ "$TAG_VERSION" != "$MANIFEST_VERSION" ]; then
+            echo "::error::Etiket ($TAG_VERSION) manifest surumuyle ($MANIFEST_VERSION) uyusmuyor."
+            echo "DESCRIPTION icindeki surumu guncelleyip yeniden etiketleyin."
+            exit 1
+          fi
+          echo "Etiket ve manifest ayni: $MANIFEST_VERSION"
+
   release-beta:
     if: needs.verify-tag-on-release.outputs.is_beta == 'true'
     needs: verify-tag-on-release
